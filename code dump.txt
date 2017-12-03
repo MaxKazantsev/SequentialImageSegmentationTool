@@ -1,0 +1,92 @@
+public void addAllEdges() {
+        for(int x = 0; x < width; x++){
+            for(int y = 0; y < height; y++){
+                int i = y*width + x;
+                if(x < width-1){
+                    Edge e = new Edge(vertices.get(i), vertices.get(i+1));
+                    edges.add(e);
+                    vertices.get(i).getEdges().add(e);
+                    vertices.get(i+1).getEdges().add(e);
+                }
+                if(x > 0 && y < height-1){
+                    Edge e = new Edge(vertices.get(i), vertices.get(i+width-1));
+                    edges.add(e);
+                    vertices.get(i).getEdges().add(e);
+                    vertices.get(i+width-1).getEdges().add(e);
+                }
+                if(y < height-1){
+                    Edge e = new Edge(vertices.get(i), vertices.get(i+width));
+                    edges.add(e);
+                    vertices.get(i).getEdges().add(e);
+                    vertices.get(i+width).getEdges().add(e);
+                }
+                if(x < width-1 && y<height-1){
+                    Edge e = new Edge(vertices.get(i), vertices.get(i+width+1));
+                    edges.add(e);
+                    vertices.get(i).getEdges().add(e);
+                    vertices.get(i+width+1).getEdges().add(e);
+                }
+            }
+        }
+    }
+
+
+
+
+
+    short[] newPixels = segmentImageGraph(oldValues);
+        short[][] newValues = vectorToMatrix(newPixels);
+        for(int i = 0; i < height; i += step)
+            for (int j = 0; j < width; j += step) {
+                System.out.println("RGB old: " + oldValues[i][j]);
+                System.out.println("RGB new: " + newValues[i][j]);
+
+            }
+        return newPixels;
+
+    private short[] getImagePixels() {
+        BufferedImage bufImg = this.sourceImage.getBufferedImage();
+        short[] pixelVector = ((DataBufferUShort) bufImg.getRaster().getDataBuffer()).getData();
+        return pixelVector;
+    }
+
+    public class Graph {
+
+    private SourceImage sourceImage;
+    private short[] imagePixels;
+    private int height;
+    private int width;
+    private short threshold;
+
+    public Graph(SourceImage curSrcImg) {
+
+        this.sourceImage = curSrcImg;
+        this.imagePixels = getImagePixels();
+        this.height = sourceImage.getHeight();
+        this.width = sourceImage.getWidth();
+    }
+
+    public short[] getNewPixels() {
+
+        short[][] oldValues = vectorToMatrix(imagePixels);
+
+        int step = 64;
+        int percent = 100;
+
+        *//*
+        for(int i = 0; i < height; i += step) {
+            for (int j = 0; j < width; j += step) {
+
+                System.out.println("RGB old: " + oldValues[i][j]);
+
+                Color c = new Color(sourceImage.getBufferedImage().getRGB(j, i));//, false);
+                newValues[i][j] = (short) c.getRGB();
+                newValues[i][j] = (short) (oldValues[i][j] + ((oldValues[i][j] / 100.0) * percent));
+                int r = c.getRed();
+                int g = c.getGreen();
+                int b = c.getBlue();
+                System.out.println("RGB new: " + oldValues[i][j]+ ", red: " + r + ", green: " + g + ", blue: " + b);
+            }
+        }
+        //short[] newPixels = matrixToVector(oldValues);
+    
